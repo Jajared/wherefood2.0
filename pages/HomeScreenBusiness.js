@@ -1,15 +1,15 @@
 import { StyleSheet, SafeAreaView, View, StatusBar } from "react-native";
-import MedicationItem from "../components/MedicationItem/MedicationItem";
+import MedicationItem from "../components/FoodItem/FoodItem";
 import { FlatList } from "react-native";
 import HomeNavBar from "../components/HomeNavBar/HomeNavBar";
 import BottomNavBar from "../components/BottomNavBar/BottomNavBar";
 
-export default function HomeScreenBusiness({ navigation, allFoodItems, userName }) {
+export default function HomeScreenBusiness({ navigation, allFoodItems, userName, userType }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.topNavBar}>
-        <HomeNavBar navigation={navigation} userName={userName} />
+        <HomeNavBar navigation={navigation} userName={userName} userType={userType} />
       </View>
       <View style={styles.bottomNavBar}>
         <BottomNavBar navigation={navigation} />

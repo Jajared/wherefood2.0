@@ -109,7 +109,7 @@ export default function App() {
       setUserId(user.uid);
       userInfoRef.current = doc(firestorage, "UsersData", user.uid);
       fetchUserData().then(async () => {
-        console.log(userInformation);
+        console.log("userInformation.UserType", userInformation.UserType);
         if (userInformation.UserType === "Establishment") {
           await fetchFoodData(doc(firestorage, "AllFoodItems", user.uid));
         } else {
@@ -169,7 +169,7 @@ export default function App() {
   };
 
   // Add medication item
-  const addMedication = async (foodItem: FoodItem) => {
+  const addFoodItem = async (foodItem: FoodItem) => {
     try {
       const newFoodItems = [...allFoodItems, foodItem];
       setAllFoodItems(newFoodItems);
@@ -206,6 +206,9 @@ export default function App() {
           <Stack.Screen name="Sign Up Details" options={{ headerShown: false }}>
             {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={setIsSignUpComplete} />}
           </Stack.Screen>
+          <Stack.Screen name="Home" options={{ headerShown: false }}>
+            {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} />}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -215,10 +218,10 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Home" options={{ headerShown: false }}>
-              {(props) => <HomeScreenBusiness {...props} allFoodItems={allFoodItems} userName={userInformation.Name} />}
+              {(props) => <HomeScreenBusiness {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} />}
             </Stack.Screen>
-            <Stack.Screen name="Add Medication Details" options={{ headerShown: false }}>
-              {(props) => <AddFoodDetails {...props} />}
+            <Stack.Screen name="Add Food Details" options={{ headerShown: false }}>
+              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} />}
             </Stack.Screen>
             <Stack.Screen name="Profile Page" options={{ headerShown: false }}>
               {(props) => <MenuPage {...props} userInformation={userInformation} setIsNotificationReset={setIsNotificationReset} onSignOut={handleSignOut} />}
@@ -243,7 +246,7 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Home" options={{ headerShown: false }}>
-              {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} />}
+              {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} />}
             </Stack.Screen>
             <Stack.Screen name="Profile Page" options={{ headerShown: false }}>
               {(props) => <MenuPage {...props} userInformation={userInformation} setIsNotificationReset={setIsNotificationReset} onSignOut={handleSignOut} />}

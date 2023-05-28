@@ -5,38 +5,12 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { Entypo } from "@expo/vector-icons";
 import CameraComponent from "../components/CameraComponent/CameraComponent";
 import CustomButton from "../components/Buttons/CustomButton";
+import FoodItem from "../components/FoodItem/FoodItem";
 
-export default function AddFoodDetails({ navigation, route }) {
-  const [state, setState] = useState({ Name: "", Type: route.params.Type, Purpose: "", Instructions: { TabletsPerIntake: 1, FrequencyPerDay: 0, Specifications: "", FirstDosageTiming: 540 } });
-  const [showCamera, setShowCamera] = useState(false);
+export default function AddFoodDetails({ navigation, route, addFoodItem }) {
+  const [state, setState] = useState({ establishmentId: "1", establishmentName: "Mcdonalds", location: "", foodName: ["croissant"], timeOfPost: "1000", stillAvailable: true, dietaryRestriction: "Vegetarian" });
 
-  function setFrequencyPerIntake(value) {
-    setState((prevState) => ({ ...prevState, Instructions: { ...prevState.Instructions, FrequencyPerDay: value } }));
-  }
-  function handleSubmit() {
-    if (state.Name.trim() === "") {
-      alert("Please enter name of medication");
-      return false;
-    }
-    if (state.Purpose.trim() === "") {
-      alert("Please enter purpose of medication");
-      return false;
-    }
-    if (state.Instructions.FrequencyPerDay == 0) {
-      alert("Please select frequency");
-      return false;
-    }
-    return true;
-  }
-
-  const handleCancel = () => {
-    setShowCamera(false);
-  };
-  return showCamera ? (
-    <View style={{ width: "100%", height: "100%" }}>
-      <CameraComponent onCancel={handleCancel} />
-    </View>
-  ) : (
+  return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <TouchableOpacity style={{ position: "absolute", top: 60, right: 40, zIndex: 1 }} onPress={() => setShowCamera(true)}>
@@ -44,84 +18,19 @@ export default function AddFoodDetails({ navigation, route }) {
       </TouchableOpacity>
       <BackNavBar navigation={navigation} title="Add Medication" />
       <View style={styles.nameSection}>
-        <Text style={styles.textHeader}>Name of Medication</Text>
-        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, Name: text.trim() })} value={state.name} placeholder="Name" />
+        <Text style={styles.textHeader}>Location</Text>
+        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, location: text.trim() })} value={state.location} placeholder="Location" />
       </View>
       <View style={styles.purposeSection}>
-        <Text style={styles.textHeader}>Purpose of Medication</Text>
-        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, Purpose: text.trim() })} value={state.purpose} placeholder="Purpose" />
-      </View>
-      <View style={styles.intakeSection}>
-        <Text style={styles.textHeader}>Tablets per Intake</Text>
-        <Button
-          title="-"
-          onPress={() => {
-            if (state.Instructions.TabletsPerIntake > 1) {
-              setState((prevState) => ({ ...prevState, Instructions: { ...prevState.Instructions, TabletsPerIntake: prevState.Instructions.TabletsPerIntake - 1 } }));
-            } else {
-              alert("Cannot be less than 1");
-            }
-          }}
-        />
-        <Text style={styles.text}>{state.Instructions.TabletsPerIntake}</Text>
-        <Button title="+" onPress={() => setState((prevState) => ({ ...prevState, Instructions: { ...prevState.Instructions, TabletsPerIntake: prevState.Instructions.TabletsPerIntake + 1 } }))} />
-      </View>
-      <View style={styles.frequencySection}>
-        <Text style={styles.textHeader}>Take this medication:</Text>
-        <View style={styles.optionsContainer}>
-          <View style={styles.optionsRow}>
-            <BouncyCheckbox
-              text="Daily"
-              textStyle={{
-                textDecorationLine: "none",
-              }}
-              style={styles.frequencyItem}
-              isChecked={state.Instructions.FrequencyPerDay === 1}
-              onPress={() => setFrequencyPerIntake(1)}
-              disableBuiltInState={true}
-            />
-            <BouncyCheckbox
-              text="Twice a day"
-              textStyle={{
-                textDecorationLine: "none",
-              }}
-              style={styles.frequencyItem}
-              isChecked={state.Instructions.FrequencyPerDay === 2}
-              onPress={() => setFrequencyPerIntake(2)}
-              disableBuiltInState={true}
-            />
-          </View>
-          <View style={styles.optionsRow}>
-            <BouncyCheckbox
-              text="Three times a day"
-              textStyle={{
-                textDecorationLine: "none",
-              }}
-              style={styles.frequencyItem}
-              isChecked={state.Instructions.FrequencyPerDay === 3}
-              onPress={() => setFrequencyPerIntake(3)}
-              disableBuiltInState={true}
-            />
-            <BouncyCheckbox
-              text="Four times a day"
-              textStyle={{
-                textDecorationLine: "none",
-              }}
-              style={styles.frequencyItem}
-              isChecked={state.Instructions.FrequencyPerDay === 4}
-              onPress={() => setFrequencyPerIntake(4)}
-              disableBuiltInState={true}
-            />
-          </View>
-        </View>
+        <Text style={styles.textHeader}>Food available:</Text>
+        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state })} value={state.foodName[0]} placeholder="Food available" />
       </View>
       <View style={styles.nextSection}>
         <CustomButton
           title="Next"
           onPress={() => {
-            if (handleSubmit() == true) {
-              navigation.navigate("Add Medication Schedule", { state });
-            }
+            addFoodItem(state);
+            navigation.navigate("Home");
           }}
         />
       </View>

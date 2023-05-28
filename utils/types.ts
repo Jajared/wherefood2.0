@@ -11,5 +11,5 @@ export interface FoodItem {
   foodName: string[];
   timeOfPost: string;
   stillAvailable: boolean;
-  cuisine?: string[];
+  dietaryRestriction: string;
 }
