@@ -8,10 +8,8 @@ export const userDataConverter = {
     const data = snapshot.data();
     return {
       Name: data.Name,
-      Gender: data.Gender,
-      DateOfBirth: data.DateOfBirth,
       EmailAddress: data.EmailAddress,
-      PhoneNumber: data.PhoneNumber,
+      UserType: data.UserType,
     };
   },
 };

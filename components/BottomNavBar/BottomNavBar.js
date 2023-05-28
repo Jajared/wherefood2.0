@@ -5,12 +5,6 @@ export default function BottomNavBar({ title, props, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.iconSection}>
-        <TouchableOpacity onPress={() => navigation.navigate("View All Medications")}>
-          <FontAwesome5 name="pills" size={30} color="black" style={styles.icon} />
-          <Text style={styles.text}>Medications</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.iconSection}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Entypo name="home" size={30} color="black" style={styles.icon} />
           <Text style={styles.text}>Home</Text>

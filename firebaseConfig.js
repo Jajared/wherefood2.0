@@ -6,14 +6,12 @@ import { getAuth } from "firebase/auth";
 import "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA630mEkGs-Zq9cMkIVWs9rfrLEZGOIKic",
-  authDomain: "medalert-386812.firebaseapp.com",
-  databaseURL: "https://medalert-386812-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "medalert-386812",
-  storageBucket: "medalert-386812.appspot.com",
-  messagingSenderId: "435459398641",
-  appId: "1:435459398641:web:c640e32a44f0e4cb598250",
-  measurementId: "G-ZL35VZP8EM",
+  apiKey: "AIzaSyDYMScEApZERrzJU6u_QptDrd5XcVwdAaI",
+  authDomain: "wherefood2.firebaseapp.com",
+  projectId: "wherefood2",
+  storageBucket: "wherefood2.appspot.com",
+  messagingSenderId: "576062235326",
+  appId: "1:576062235326:web:14a22ee8fd0a31f5acf4ef",
 };
 
 export const app = initializeApp(firebaseConfig);

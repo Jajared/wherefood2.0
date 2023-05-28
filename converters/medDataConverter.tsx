@@ -1,19 +1,17 @@
-import { MedicationItem, ScheduledItem } from "../utils/types";
+import { FoodItem } from "../utils/types";
 
 interface FirestoreData {
-  MedicationItems: MedicationItem[];
-  ScheduledItems: ScheduledItem[];
+  FoodItems: FoodItem[];
 }
 
-export const medDataConverter = {
+export const foodDataConverter = {
   toFirestore(data: FirestoreData) {
-    return { MediationItems: data.MedicationItems, ScheduledItems: data.ScheduledItems };
+    return { FoodItems: data.FoodItems };
   },
   fromFirestore(snapshot): FirestoreData {
     const data = snapshot.data();
     return {
-      MedicationItems: data.MedicationItems,
-      ScheduledItems: data.ScheduledItems,
+      FoodItems: data.FoodItems,
     };
   },
 };

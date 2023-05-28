@@ -2,7 +2,7 @@ import { Text, SafeAreaView, StyleSheet, View, TouchableOpacity, Image, Alert, S
 import BackNavBar from "../components/BackNavBar/BackNavBar";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Ionicons, Feather } from "@expo/vector-icons";
 
-export default function ProfilePage({ navigation, userInformation, resetScheduledItems, setIsNotificationReset, onSignOut }) {
+export default function ProfilePage({ navigation, userInformation, setIsNotificationReset, onSignOut }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -16,13 +16,7 @@ export default function ProfilePage({ navigation, userInformation, resetSchedule
           </View>
           <Feather name="arrow-right" size={24} color="black" style={{ flex: 1 }} />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.settingsItem}
-          onPress={() => {
-            resetScheduledItems();
-            setIsNotificationReset(true);
-          }}
-        >
+        <TouchableOpacity style={styles.settingsItem} onPress={() => alert("button pressed")}>
           <MaterialIcons name="supervisor-account" size={30} color="black" style={{ flex: 1 }} />
           <View style={styles.settingInfo}>
             <Text style={styles.settingsTitle}>Saved Guardian</Text>

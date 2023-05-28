@@ -6,6 +6,7 @@ import { doc, collection, setDoc } from "firebase/firestore";
 import { firestorage, storage } from "../firebaseConfig";
 import DropDownPicker from "react-native-dropdown-picker";
 import CalendarPicker from "react-native-calendar-picker";
+import { UserInformation } from "../utils/types";
 
 /**https://firebasestorage.googleapis.com/v0/b/medalert-386812.appspot.com/o/profilePictures%2FcLNeJdkRJkfEzLMugJipcamAWwb2?alt=media&token=e2ea4d15-ec26-410e-b584-3aac020bfe15 */
 
@@ -17,18 +18,9 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
   const [selectedDOB, setSelectedDOB] = useState(null);
   const [personalDetails, setPersonalDetails] = useState({
     Name: "",
-    Gender: "",
-    DateOfBirth: "",
     EmailAddress: route.params.EmailAddress,
-    PhoneNumber: "",
+    UserType: "",
   });
-
-  const handleModal = () => setIsModalVisible(() => !isModalVisible);
-  function onDateChange(date) {
-    var newDate = (date.date() < 10 ? "0" + date.date() : date.date()) + "/" + (date.month() < 10 ? "0" + +(parseInt(date.month()) + 1) : parseInt(date.month()) + 1) + "/" + date.year();
-    setSelectedDOB(date);
-    setPersonalDetails({ ...personalDetails, DateOfBirth: newDate });
-  }
 
   const handleFormSubmit = async () => {
     const userInfoRef = doc(collection(firestorage, "UsersData"), userId);
@@ -40,15 +32,17 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
       .catch((error) => {
         console.error("Error pushing data:", error);
       });
-    // Update medication information in Firestore
-    const medInfoRef = doc(collection(firestorage, "MedicationInformation"), userId);
-    setDoc(medInfoRef, { MedicationItems: [], ScheduledItems: [] })
-      .then((docRef) => {
-        console.log("Data pushed successfully.");
-      })
-      .catch((error) => {
-        console.error("Error pushing data:", error);
-      });
+    if (personalDetails.UserType === "Establishment") {
+      const foodInfoRef = doc(collection(firestorage, "AllFoodItems"), userId);
+      setDoc(foodInfoRef, { FoodItems: [] })
+        .then((docRef) => {
+          console.log("Data pushed successfully.");
+        })
+        .catch((error) => {
+          console.error("Error pushing data:", error);
+        });
+    }
+
     await setIsSignUpComplete(true);
     navigation.navigate("Home");
   };
@@ -64,33 +58,18 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
           <TextInput style={styles.inputBox} value={personalDetails.Name} placeholder="Name" onChangeText={(text) => setPersonalDetails({ ...personalDetails, Name: text })}></TextInput>
         </View>
         <View style={styles.inputItem}>
-          <Text style={styles.inputTitle}>Date of Birth</Text>
-          <TextInput style={styles.inputBox} value={personalDetails.DateOfBirth} placeholder="Date of Birth" onTouchStart={handleModal} editable={false} />
-          <Modal isVisible={isModalVisible} animationType="slide" transparent={true}>
-            <View style={styles.calendar}>
-              <CalendarPicker onDateChange={onDateChange} selectedDayColor="#DE3163" />
-              <Button title="Hide calendar" onPress={handleModal} />
-            </View>
-          </Modal>
-        </View>
-        <View style={styles.inputItem}>
-          <Text style={styles.inputTitle}>Phone Number</Text>
-          <TextInput style={styles.inputBox} value={personalDetails.PhoneNumber} placeholder="Phone Number" keyboardType="numeric" onChangeText={(text) => setPersonalDetails({ ...personalDetails, PhoneNumber: text })}></TextInput>
-        </View>
-        <View style={styles.inputItem}>
-          <Text style={styles.inputTitle}>Gender</Text>
+          <Text style={styles.inputTitle}>User type</Text>
           <DropDownPicker
             placeholder="Select One"
             open={dropDownOpen}
             setOpen={setDropDownOpen}
             items={[
-              { label: "Male", value: "Male" },
-              { label: "Female", value: "Female" },
-              { label: "Prefer not to say", value: "Prefer not to say" },
+              { label: "Customer", value: "Customer" },
+              { label: "Establishment", value: "Establishment" },
             ]}
-            value={personalDetails.Gender}
+            value={personalDetails.UserType}
             onSelectItem={(item) => {
-              setPersonalDetails({ ...personalDetails, Gender: item.value });
+              setPersonalDetails({ ...personalDetails, UserType: item.value });
             }}
             textStyle={{ color: "grey", fontSize: 15 }}
             style={[styles.inputBox, { borderWidth: 0, borderRadius: 0 }]}
