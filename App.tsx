@@ -213,6 +213,7 @@ export default function App() {
       </NavigationContainer>
     );
   } else {
+    console.log(allFoodItems);
     if (userInformation.UserType == "Establishment") {
       return (
         <NavigationContainer>
