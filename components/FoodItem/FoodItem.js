@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity, Animated
 import { Swipeable } from "react-native-gesture-handler";
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
 
+
 export default function FoodItem({ props, navigation, userType, foodItemAction }) {
   const foodData = props.item;
   const placeholder = userType === "Establishment" ? "Mark as unavailable" : "Favourite";
@@ -33,25 +34,25 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
         <Swipeable renderRightActions={rightActions}>
           <View style={styles.itemContainer}>
             <View style={styles.keyInfoContainer}>
-              <View style={{ flex: 2, flexDirection: "row" }}>
-                <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 6, fontWeight: "bold", fontSize: 18 }}>
+              <View style={{ flex: 2, flexWrap: "wrap", flexDirection: "row" }}>
+                <Entypo name="location-pin" size={20} color="black" style={{ flexWrap: "wrap",flex: 1 }} />
+                <Text style={{ flex: 6, flexWrap: "wrap", fontWeight: "bold", fontSize: 18 }}>
                   {foodData.establishmentName}, {foodData.location}
                 </Text>
               </View>
-              <View style={{ flex: 1, flexDirection: "row" }}>
-                <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
+              <View style={{ flex: 1, flexWrap: "wrap", flexDirection: "row" }}>
+                <AntDesign name="clockcircleo" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
                 <Text style={styles.timeText}>{getTime()}</Text>
               </View>
             </View>
             <View style={styles.foodContainer}>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16 }}>{foodData.foodName}</Text>
+              <View style={{ flex: 1, flexWrap: "wrap", flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="fast-food" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
+                <Text style={{ flexWrap: "wrap", flex: 7, fontSize: 16 }}>{foodData.foodName}</Text>
               </View>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
+              <View style={{ flex: 1, flexWrap: "wrap", flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="warning" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
+                <Text style={{ flexWrap: "wrap", flex: 7, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
               </View>
             </View>
           </View>
@@ -60,23 +61,23 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
         <Swipeable renderRightActions={rightActions}>
           <View style={styles.itemContainer}>
             <View style={styles.keyInfoContainer}>
-              <View style={{ flex: 1, flexDirection: "row" }}>
-                <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 6, fontWeight: "bold", fontSize: 18 }}>{foodData.location}</Text>
+              <View style={{ flexWrap: "wrap", flex: 1, flexDirection: "row" }}>
+                <Entypo name="location-pin" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
+                <Text style={{ flexWrap: "wrap", flex: 6, fontWeight: "bold", fontSize: 18 }}>{foodData.location}</Text>
               </View>
-              <View style={{ flex: 1.3, flexDirection: "row" }}>
-                <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
+              <View style={{ flexWrap: "wrap", flex: 1.3, flexDirection: "row" }}>
+                <AntDesign name="clockcircleo" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
                 <Text style={styles.timeText}>Best by: {getTime()}</Text>
               </View>
             </View>
             <View style={styles.foodContainer}>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16 }}>{foodData.foodName}</Text>
+              <View style={{ flexWrap: "wrap", flex: 1, flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="fast-food" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
+                <Text style={{ flexWrap: "wrap", flex: 7, fontSize: 16 }}>{foodData.foodName}</Text>
               </View>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
+              <View style={{ flexWrap: "wrap", flex: 1, flexDirection: "row", alignItems: "center" }}>
+                <Ionicons name="warning" size={20} color="black" style={{ flexWrap: "wrap", flex: 1 }} />
+                <Text style={{ flexWrap: "wrap", flex: 7, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
               </View>
             </View>
           </View>
