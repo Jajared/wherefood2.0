@@ -11,7 +11,7 @@ export default function HomeScreenBusiness({ navigation, allFoodItems, userName,
       <View style={styles.topNavBar}>
         <HomeNavBar navigation={navigation} userName={userName} userType={userType} pressAction={() => alert("ok")} />
       </View>
-      <View style={styles.medicationSection}>{allFoodItems && <FlatList data={allFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
+      <View style={styles.foodSection}>{allFoodItems && <FlatList data={allFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
       <View style={styles.bottomNavBar}>
         <BottomNavBar navigation={navigation} />
       </View>
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   bottomNavBar: {
     flex: 1,
   },
-  medicationSection: {
+  foodSection: {
     flex: 7,
     width: "100%",
   },

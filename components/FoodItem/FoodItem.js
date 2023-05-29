@@ -33,13 +33,15 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
         <Swipeable renderRightActions={rightActions}>
           <View style={styles.itemContainer}>
             <View style={styles.keyInfoContainer}>
-              <View style={{ flex: 1, flexDirection: "row" }}>
+              <View style={{ flex: 2, flexDirection: "row" }}>
                 <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 6, fontWeight: "bold", fontSize: 18 }}>{foodData.location}</Text>
+                <Text style={{ flex: 6, fontWeight: "bold", fontSize: 18 }}>
+                  {foodData.establishmentName}, {foodData.location}
+                </Text>
               </View>
-              <View style={{ flex: 1.3, flexDirection: "row" }}>
+              <View style={{ flex: 1, flexDirection: "row" }}>
                 <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={styles.timeText}>Best by: {getTime()}</Text>
+                <Text style={styles.timeText}>{getTime()}</Text>
               </View>
             </View>
             <View style={styles.foodContainer}>
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   timeText: {
-    flex: 5,
+    flex: 3,
     fontWeight: "bold",
     fontSize: 18,
   },

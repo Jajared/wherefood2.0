@@ -32,19 +32,6 @@ export default function App() {
   const userInfoRef = useRef<DocumentReference>();
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
 
-  const fetchUserData = async (): Promise<void> => {
-    try {
-      setIsLoading(true);
-      const userQuerySnapshot = await getDoc(userInfoRef.current.withConverter(userDataConverter));
-      const userInfoData = userQuerySnapshot.data();
-      setUserInformation(userInfoData);
-      console.log("Login Data fetched successfully");
-    } catch (error) {
-      console.log("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const fetchFoodData = async (foodInfoRef: DocumentReference): Promise<void> => {
     console.log("Fetching food data");
     try {
@@ -84,18 +71,26 @@ export default function App() {
     }
   };
 
-  const getInitialData = () => {
-    if (userId) {
-      userInfoRef.current = doc(firestorage, "UsersData", userId);
-      fetchUserData().then(() => {
-        if (userInformation.UserType === "Establishment") {
+  const getInitialData = async () => {
+    try {
+      if (userId) {
+        setIsLoading(true);
+        userInfoRef.current = doc(firestorage, "UsersData", userId);
+        const userQuerySnapshot = await getDoc(userInfoRef.current.withConverter(userDataConverter));
+        const userInfoData = userQuerySnapshot.data();
+        setUserInformation(userInfoData);
+        if (userInfoData.UserType === "Establishment") {
           userInfoRef.current = doc(firestorage, "UsersData", userId);
           fetchFoodData(doc(firestorage, "AllFoodItems", userId));
         } else {
           userInfoRef.current = doc(firestorage, "UsersData", userId);
           fetchAllFoodData(collection(firestorage, "AllFoodItems"));
         }
-      });
+      }
+    } catch (error) {
+      console.log("Error getting initial data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -159,7 +154,7 @@ export default function App() {
     }
   };
 
-  // Deletes medication item from list and updates database
+  // Deletes food item from list and updates database
   const deleteFoodItem = async (itemId: string) => {
     var newAllFoodItems = [...allFoodItems];
     for (var i = 0; i < newAllFoodItems.length; i++) {
@@ -178,7 +173,7 @@ export default function App() {
     fetchFoodData(doc(firestorage, "AllFoodItems", userId));
   };
 
-  // Add medication item
+  // Add food item
   const addFoodItem = async (foodItem: FoodItem) => {
     try {
       const newFoodItems = [...allFoodItems, foodItem];
@@ -187,9 +182,9 @@ export default function App() {
       await updateDoc(doc(firestorage, "AllFoodItems", userId), {
         FoodItems: newFoodItems,
       });
-      console.log("Medication added successfully.");
+      console.log("Food added successfully.");
     } catch (error) {
-      console.error("Error adding medication:", error);
+      console.error("Error adding food:", error);
     }
   };
 
@@ -235,7 +230,7 @@ export default function App() {
               {(props) => <HomeScreenBusiness {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} foodItemAction={deleteFoodItem} />}
             </Stack.Screen>
             <Stack.Screen name="Add Food Details" options={{ headerShown: false }}>
-              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} userlocation={userInformation.Location} />}
+              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} establishmentName={userInformation.Name} userlocation={userInformation.Location} />}
             </Stack.Screen>
             <Stack.Screen name="Profile Page" options={{ headerShown: false }}>
               {(props) => <MenuPage {...props} userInformation={userInformation} onSignOut={handleSignOut} />}

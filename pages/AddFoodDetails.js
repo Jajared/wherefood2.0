@@ -5,8 +5,8 @@ import CustomButton from "../components/Buttons/CustomButton";
 import uuid from "react-native-uuid";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-export default function AddFoodDetails({ navigation, route, addFoodItem, userlocation }) {
-  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: "Mcdonalds", location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "" });
+export default function AddFoodDetails({ navigation, route, establishmentName, addFoodItem, userlocation }) {
+  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: establishmentName, location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "" });
   const [date, setDate] = useState(new Date(2023, 1, 1, 9, 0, 0));
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
