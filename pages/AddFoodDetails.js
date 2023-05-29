@@ -22,6 +22,19 @@ export default function AddFoodDetails({ navigation, route, establishmentName, a
     var time = hours * 60 + minutes;
     return time;
   }
+  function handleSubmit() {
+    if (state.foodName.trim() === "") {
+      alert("Please enter the name of the food available");
+      return false;
+    }
+
+    if (state.dietaryRestriction.trim() === "") {
+      alert("Please type in NIL if there are no specific dietary instructions");
+      return false;
+    }
+    return true;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -42,8 +55,10 @@ export default function AddFoodDetails({ navigation, route, establishmentName, a
         <CustomButton
           title="Next"
           onPress={() => {
-            addFoodItem(state);
-            navigation.navigate("Home");
+            if (handleSubmit() == true) {
+              addFoodItem(state);
+              navigation.navigate("Home");
+            }
           }}
         />
       </View>
