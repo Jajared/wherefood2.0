@@ -15,7 +15,7 @@ export default function LoginPage({ navigation, onLogin }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <Image source={require("../assets/medalert_icon.png")} style={styles.logo}></Image>
+      <Image source={require("../assets/wherefood_icon.png")} style={styles.logo}></Image>
       <Text style={styles.title}>Welcome! 👋</Text>
       <View style={styles.inputBox}>
         <AntDesign name="mail" size={20} color="black" style={styles.inputIcon} />
@@ -49,7 +49,7 @@ export default function LoginPage({ navigation, onLogin }) {
         }}
         style={styles.buttonContainer}
       >
-        <LinearGradient colors={["#FFA7AF", "#FF014E"]} style={styles.gradient}>
+        <LinearGradient colors={["#50C878", "#228B22"]} style={styles.gradient}>
           <Text style={styles.buttonText}>Login</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -57,7 +57,7 @@ export default function LoginPage({ navigation, onLogin }) {
       <View style={styles.signUpSection}>
         <Text style={{ fontSize: 15 }}>Don't have any account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Sign Up Home")}>
-          <Text style={{ color: "#FF014E", fontSize: 15 }}> Sign Up</Text>
+          <Text style={{ color: "#228B22", fontSize: 15 }}> Sign Up</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

@@ -10,6 +10,7 @@ export const userDataConverter = {
       Name: data.Name,
       EmailAddress: data.EmailAddress,
       UserType: data.UserType,
+      Location: data.Location,
     };
   },
 };

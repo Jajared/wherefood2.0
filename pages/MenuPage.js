@@ -2,7 +2,7 @@ import { Text, SafeAreaView, StyleSheet, View, TouchableOpacity, Image, Alert, S
 import BackNavBar from "../components/BackNavBar/BackNavBar";
 import { MaterialCommunityIcons, MaterialIcons, AntDesign, Ionicons, Feather } from "@expo/vector-icons";
 
-export default function ProfilePage({ navigation, userInformation, setIsNotificationReset, onSignOut }) {
+export default function ProfilePage({ navigation, userInformation, onSignOut }) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -13,22 +13,6 @@ export default function ProfilePage({ navigation, userInformation, setIsNotifica
           <View style={styles.settingInfo}>
             <Text style={styles.settingsTitle}>Update Account</Text>
             <Text style={styles.settingDescription}>Make changes to your account</Text>
-          </View>
-          <Feather name="arrow-right" size={24} color="black" style={{ flex: 1 }} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.settingsItem} onPress={() => alert("button pressed")}>
-          <MaterialIcons name="supervisor-account" size={30} color="black" style={{ flex: 1 }} />
-          <View style={styles.settingInfo}>
-            <Text style={styles.settingsTitle}>Saved Guardian</Text>
-            <Text style={styles.settingsDescription}>Manage your guardian information</Text>
-          </View>
-          <Feather name="arrow-right" size={24} color="black" style={{ flex: 1 }} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.settingsItem} onPress={() => navigation.navigate("Medication Database")}>
-          <AntDesign name="database" size={30} color="black" style={{ flex: 1 }} />
-          <View style={styles.settingInfo}>
-            <Text style={styles.settingsTitle}>Medication Database</Text>
-            <Text style={styles.settingsDescription}>Search through our database for your medication</Text>
           </View>
           <Feather name="arrow-right" size={24} color="black" style={{ flex: 1 }} />
         </TouchableOpacity>
@@ -67,6 +51,7 @@ export default function ProfilePage({ navigation, userInformation, setIsNotifica
           </TouchableOpacity>
         </View>
       </View>
+      <View style={styles.emptySection}></View>
     </SafeAreaView>
   );
 }
@@ -80,7 +65,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   mainSettingsSection: {
-    flex: 5,
+    flex: 3,
     flexDirection: "column",
     borderColor: "black",
     borderWidth: 1,
@@ -116,5 +101,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     borderRadius: 15,
+  },
+  emptySection: {
+    flex: 3,
   },
 });

@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
+import { collection, getDocs } from "firebase/firestore";
+import { firestorage } from "../../firebaseConfig";
+const allFoodItemCollection = collection(firestorage, "AllFoodItems");
 
-export default function HomeNavBar({ props, navigation, userName, userType }) {
-  console.log(userType);
+export default function HomeNavBar({ props, navigation, userName, userType, pressAction }) {
   return (
     <View style={styles.container}>
       {userType == "Establishment" ? (
@@ -10,9 +12,15 @@ export default function HomeNavBar({ props, navigation, userName, userType }) {
           <AntDesign name="plus" size={25} color="black" />
         </TouchableOpacity>
       ) : (
-        <View style={styles.addButton}>
-          <AntDesign name="plus" size={25} color="white" />
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Refreshing");
+            pressAction(allFoodItemCollection);
+          }}
+          style={styles.addButton}
+        >
+          <Feather name="refresh-cw" size={25} color="black" />
+        </TouchableOpacity>
       )}
       <Text style={styles.userSection}>Hey {userName}!</Text>
       <Text style={styles.daySection}>{new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date())}</Text>

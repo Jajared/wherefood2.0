@@ -29,7 +29,7 @@ export default function SignUpHomePage({ navigation, onSignUpHome }) {
       <StatusBar barStyle="dark-content" />
       <BackNavBar navigation={navigation} title="Sign Up" />
       <Text style={styles.title}>Create an account with us!</Text>
-      <Text style={styles.header}>Start your journey with MedAlert!</Text>
+      <Text style={styles.header}>Start your journey with wherefood!</Text>
       <View style={styles.inputItem}>
         <Text style={styles.inputTitle}>Email</Text>
         <View style={styles.inputBox}>
@@ -66,7 +66,7 @@ export default function SignUpHomePage({ navigation, onSignUpHome }) {
         }}
         style={styles.buttonContainer}
       >
-        <LinearGradient colors={["#FFA7AF", "#FF014E"]} style={styles.gradient}>
+        <LinearGradient colors={["#50C878", "#228B22"]} style={styles.gradient}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </LinearGradient>
       </TouchableOpacity>

@@ -28,12 +28,8 @@ export default function App() {
   const [allFoodItems, setAllFoodItems] = useState<FoodItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userId, setUserId] = useState("");
-  const [userType, setUserType] = useState("");
   const [isSignUpComplete, setIsSignUpComplete] = useState(false);
   const userInfoRef = useRef<DocumentReference>();
-  const notificationListener = useRef<Subscription>();
-  const responseListener = useRef<Subscription>();
-  const [isNotificationReset, setIsNotificationReset] = useState(false);
   const [isUserLoggedIn, setUserLoggedIn] = useState(false);
 
   const fetchUserData = async (): Promise<void> => {
@@ -42,7 +38,7 @@ export default function App() {
       const userQuerySnapshot = await getDoc(userInfoRef.current.withConverter(userDataConverter));
       const userInfoData = userQuerySnapshot.data();
       setUserInformation(userInfoData);
-      console.log("Data fetched successfully");
+      console.log("Login Data fetched successfully");
     } catch (error) {
       console.log("Error fetching data:", error);
     } finally {
@@ -50,9 +46,9 @@ export default function App() {
     }
   };
   const fetchFoodData = async (foodInfoRef: DocumentReference): Promise<void> => {
+    console.log("Fetching food data");
     try {
       setIsLoading(true);
-      console.log("2");
       const foodInfoQuerySnapshot = await getDoc(foodInfoRef.withConverter(foodDataConverter));
       const foodInfoData = foodInfoQuerySnapshot.data();
       setAllFoodItems(foodInfoData.FoodItems);
@@ -64,10 +60,15 @@ export default function App() {
     }
   };
 
+  const handleSignUpComplete = () => {
+    getInitialData();
+    setIsSignUpComplete(true);
+  };
+
   const fetchAllFoodData = async (foodInfoRef: CollectionReference): Promise<void> => {
+    console.log("Fetching all food data");
     try {
       setIsLoading(true);
-      console.log("1");
       const foodInfoQuerySnapshot = await getDocs(query(foodInfoRef));
       const tempFoodItems: FoodItem[] = [];
       foodInfoQuerySnapshot.forEach((doc) => {
@@ -83,18 +84,20 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    if (userId && isSignUpComplete) {
-      fetchUserData();
-      if (userInformation.UserType === "Establishment") {
-        userInfoRef.current = doc(firestorage, "UsersData", userId);
-        fetchFoodData(doc(firestorage, "AllFoodItems", userId));
-      } else {
-        userInfoRef.current = doc(firestorage, "UsersData", userId);
-        fetchAllFoodData(collection(firestorage, "AllFoodItems"));
-      }
+  const getInitialData = () => {
+    if (userId) {
+      userInfoRef.current = doc(firestorage, "UsersData", userId);
+      fetchUserData().then(() => {
+        if (userInformation.UserType === "Establishment") {
+          userInfoRef.current = doc(firestorage, "UsersData", userId);
+          fetchFoodData(doc(firestorage, "AllFoodItems", userId));
+        } else {
+          userInfoRef.current = doc(firestorage, "UsersData", userId);
+          fetchAllFoodData(collection(firestorage, "AllFoodItems"));
+        }
+      });
     }
-  }, [userId, isSignUpComplete]);
+  };
 
   // Sign up handler
   const handleSignUpHome = (userId: string) => {
@@ -104,24 +107,29 @@ export default function App() {
   // Login handler
   const handleLogin = async (email: string, password: string) => {
     try {
+      setIsLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       setUserId(user.uid);
-      userInfoRef.current = doc(firestorage, "UsersData", user.uid);
-      fetchUserData().then(async () => {
-        console.log("userInformation.UserType", userInformation.UserType);
-        if (userInformation.UserType === "Establishment") {
-          await fetchFoodData(doc(firestorage, "AllFoodItems", user.uid));
-        } else {
-          await fetchAllFoodData(collection(firestorage, "AllFoodItems"));
-        }
-      });
+      const userRef = doc(firestorage, "UsersData", user.uid);
+      userInfoRef.current = userRef;
+      const userQuerySnapshot = await getDoc(userRef.withConverter(userDataConverter));
+      const userInfoData = userQuerySnapshot.data();
+      setUserInformation(userInfoData);
+      if (userInfoData.UserType === "Establishment") {
+        fetchFoodData(doc(firestorage, "AllFoodItems", user.uid));
+      } else {
+        fetchAllFoodData(collection(firestorage, "AllFoodItems"));
+      }
       setUserLoggedIn(true);
+
       console.log("Successfully logged in");
       return true;
     } catch (error) {
       console.log("Error logging in:", error);
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -132,6 +140,7 @@ export default function App() {
         setUserLoggedIn(false);
         setIsSignUpComplete(false);
         setUserId("");
+        setAllFoodItems([]);
         console.log("Successfully signed out");
       });
     } catch (error) {
@@ -151,14 +160,15 @@ export default function App() {
   };
 
   // Deletes medication item from list and updates database
-  const deleteMedicationFromList = async (foodItem: FoodItem) => {
+  const deleteFoodItem = async (itemId: string) => {
     var newAllFoodItems = [...allFoodItems];
     for (var i = 0; i < newAllFoodItems.length; i++) {
-      if (newAllFoodItems[i].foodName == foodItem.foodName) {
+      console.log(newAllFoodItems[i]);
+      if (newAllFoodItems[i].itemId == itemId) {
         newAllFoodItems.splice(i, 1);
       }
     }
-    await updateDoc(doc(firestorage, "AllFoodItems", userId), { MedicationItems: newAllFoodItems })
+    await updateDoc(doc(firestorage, "AllFoodItems", userId), { FoodItems: newAllFoodItems })
       .then((docRef) => {
         console.log("Data changed successfully.");
       })
@@ -183,6 +193,10 @@ export default function App() {
     }
   };
 
+  const favouriteFoodItem = async (itemId: string) => {
+    alert("You have added this to your favourites");
+  };
+
   if (isLoading) {
     return (
       <View style={styles.container}>
@@ -204,28 +218,27 @@ export default function App() {
             {(props) => <SignUpHomePage {...props} onSignUpHome={handleSignUpHome} />}
           </Stack.Screen>
           <Stack.Screen name="Sign Up Details" options={{ headerShown: false }}>
-            {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={setIsSignUpComplete} />}
+            {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={handleSignUpComplete} />}
           </Stack.Screen>
           <Stack.Screen name="Home" options={{ headerShown: false }}>
-            {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} />}
+            {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} refreshData={() => {}} userType={"Customer"} foodItemAction={favouriteFoodItem} />}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     );
   } else {
-    console.log(allFoodItems);
     if (userInformation.UserType == "Establishment") {
       return (
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Home" options={{ headerShown: false }}>
-              {(props) => <HomeScreenBusiness {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} />}
+              {(props) => <HomeScreenBusiness {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} foodItemAction={deleteFoodItem} />}
             </Stack.Screen>
             <Stack.Screen name="Add Food Details" options={{ headerShown: false }}>
-              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} />}
+              {(props) => <AddFoodDetails {...props} addFoodItem={addFoodItem} userlocation={userInformation.Location} />}
             </Stack.Screen>
             <Stack.Screen name="Profile Page" options={{ headerShown: false }}>
-              {(props) => <MenuPage {...props} userInformation={userInformation} setIsNotificationReset={setIsNotificationReset} onSignOut={handleSignOut} />}
+              {(props) => <MenuPage {...props} userInformation={userInformation} onSignOut={handleSignOut} />}
             </Stack.Screen>
             <Stack.Screen name="Update Account" options={{ headerShown: false }}>
               {(props) => <UpdateAccountPage {...props} userInformation={userInformation} updateUserInformation={updateUserInformation} />}
@@ -237,7 +250,7 @@ export default function App() {
               {(props) => <SignUpHomePage {...props} onSignUpHome={handleSignUpHome} />}
             </Stack.Screen>
             <Stack.Screen name="Sign Up Details" options={{ headerShown: false }}>
-              {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={setIsSignUpComplete} />}
+              {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={handleSignUpComplete} />}
             </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>
@@ -247,10 +260,10 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen name="Home" options={{ headerShown: false }}>
-              {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} userType={userInformation.UserType} />}
+              {(props) => <HomeScreenCustomer {...props} allFoodItems={allFoodItems} userName={userInformation.Name} refreshData={() => fetchAllFoodData} userType={userInformation.UserType} foodItemAction={favouriteFoodItem} />}
             </Stack.Screen>
             <Stack.Screen name="Profile Page" options={{ headerShown: false }}>
-              {(props) => <MenuPage {...props} userInformation={userInformation} setIsNotificationReset={setIsNotificationReset} onSignOut={handleSignOut} />}
+              {(props) => <MenuPage {...props} userInformation={userInformation} onSignOut={handleSignOut} />}
             </Stack.Screen>
             <Stack.Screen name="Update Account" options={{ headerShown: false }}>
               {(props) => <UpdateAccountPage {...props} userInformation={userInformation} updateUserInformation={updateUserInformation} />}
@@ -262,7 +275,7 @@ export default function App() {
               {(props) => <SignUpHomePage {...props} onSignUpHome={handleSignUpHome} />}
             </Stack.Screen>
             <Stack.Screen name="Sign Up Details" options={{ headerShown: false }}>
-              {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={setIsSignUpComplete} />}
+              {(props) => <SignUpDetailsPage {...props} setIsSignUpComplete={handleSignUpComplete} />}
             </Stack.Screen>
           </Stack.Navigator>
         </NavigationContainer>

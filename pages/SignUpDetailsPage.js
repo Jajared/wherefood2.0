@@ -12,14 +12,12 @@ import { UserInformation } from "../utils/types";
 
 export default function SignUpDetailsPage({ navigation, route, setIsSignUpComplete }) {
   const userId = route.params.userId;
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const [imageUri, setImageUri] = useState(null);
-  const [selectedDOB, setSelectedDOB] = useState(null);
   const [personalDetails, setPersonalDetails] = useState({
     Name: "",
     EmailAddress: route.params.EmailAddress,
     UserType: "",
+    Location: "",
   });
 
   const handleFormSubmit = async () => {
@@ -58,6 +56,10 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
           <TextInput style={styles.inputBox} value={personalDetails.Name} placeholder="Name" onChangeText={(text) => setPersonalDetails({ ...personalDetails, Name: text })}></TextInput>
         </View>
         <View style={styles.inputItem}>
+          <Text style={styles.inputTitle}>Location</Text>
+          <TextInput style={styles.inputBox} value={personalDetails.Location} placeholder="Location" onChangeText={(text) => setPersonalDetails({ ...personalDetails, Location: text })}></TextInput>
+        </View>
+        <View style={styles.inputItem}>
           <Text style={styles.inputTitle}>User type</Text>
           <DropDownPicker
             placeholder="Select One"
@@ -76,9 +78,10 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
             dropDownContainerStyle={{ borderWidth: 0 }}
           />
         </View>
+
         <View style={styles.emptySection}></View>
         <TouchableOpacity onPress={() => handleFormSubmit()} style={styles.buttonContainer}>
-          <LinearGradient colors={["#FFA7AF", "#FF014E"]} style={styles.gradient}>
+          <LinearGradient colors={["#50C878", "#228B22"]} style={styles.gradient}>
             <Text style={styles.buttonText}>Confirm</Text>
           </LinearGradient>
         </TouchableOpacity>

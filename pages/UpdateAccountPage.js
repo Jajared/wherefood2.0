@@ -75,48 +75,11 @@ export default function UpdateAccountPage({ navigation, userInformation, updateU
 
         <View style={styles.subSection}>
           <View style={styles.title}>
-            <Text style={styles.text}> Phone Number: </Text>
+            <Text style={styles.text}> Account type: </Text>
           </View>
           <View style={styles.editBox}>
-            <TextInput value={state.PhoneNumber} onChangeText={(text) => setState({ ...state, PhoneNumber: text })} keyboardType="numeric"></TextInput>
+            <Text value={state.UserType}>{state.UserType}</Text>
           </View>
-        </View>
-
-        <View style={[styles.subSection, { zIndex: 2 }]}>
-          <View style={styles.title}>
-            <Text style={styles.text}> Gender: </Text>
-          </View>
-          <DropDownPicker
-            placeholder="Select One"
-            open={dropDownOpen}
-            setOpen={setDropDownOpen}
-            items={[
-              { label: "Male", value: "Male" },
-              { label: "Female", value: "Female" },
-              { label: "Prefer not to say", value: "Prefer not to say" },
-            ]}
-            value={state.Gender}
-            onSelectItem={(item) => {
-              setState({ ...state, Gender: item.value });
-            }}
-            style={styles.editBox}
-          />
-        </View>
-
-        <View style={[styles.subSection, { zIndex: 1 }]}>
-          <View style={styles.title}>
-            <Text style={styles.text}> Date of Birth: </Text>
-          </View>
-          <TouchableOpacity style={styles.editBox} onPress={handleModal}>
-            <Text>{state.DateOfBirth}</Text>
-          </TouchableOpacity>
-
-          <Modal isVisible={isModalVisible} animationType="slide" transparent={true}>
-            <View style={styles.calendar}>
-              <CalendarPicker onDateChange={onDateChange} selectedDayColor="#DE3163" />
-              <Button title="Hide calendar" onPress={handleModal} />
-            </View>
-          </Modal>
         </View>
       </View>
 

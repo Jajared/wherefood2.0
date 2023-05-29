@@ -1,29 +1,42 @@
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput, Button, StatusBar } from "react-native";
 import { useState } from "react";
 import BackNavBar from "../components/BackNavBar/BackNavBar";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { Entypo } from "@expo/vector-icons";
-import CameraComponent from "../components/CameraComponent/CameraComponent";
 import CustomButton from "../components/Buttons/CustomButton";
-import FoodItem from "../components/FoodItem/FoodItem";
+import uuid from "react-native-uuid";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-export default function AddFoodDetails({ navigation, route, addFoodItem }) {
-  const [state, setState] = useState({ establishmentId: "1", establishmentName: "Mcdonalds", location: "", foodName: ["croissant"], timeOfPost: "1000", stillAvailable: true, dietaryRestriction: "Vegetarian" });
-
+export default function AddFoodDetails({ navigation, route, addFoodItem, userlocation }) {
+  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: "Mcdonalds", location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "" });
+  const [date, setDate] = useState(new Date(2023, 1, 1, 9, 0, 0));
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+    setBestByTiming(currentDate);
+  };
+  function setBestByTiming(date) {
+    setState((prevState) => ({ ...prevState, timeOfPost: convertTimeStringtoInteger(date) }));
+  }
+  function convertTimeStringtoInteger(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var time = hours * 60 + minutes;
+    return time;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      <TouchableOpacity style={{ position: "absolute", top: 60, right: 40, zIndex: 1 }} onPress={() => setShowCamera(true)}>
-        <Entypo name="camera" size={24} color="black" />
-      </TouchableOpacity>
-      <BackNavBar navigation={navigation} title="Add Medication" />
-      <View style={styles.nameSection}>
-        <Text style={styles.textHeader}>Location</Text>
-        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, location: text.trim() })} value={state.location} placeholder="Location" />
-      </View>
+      <BackNavBar navigation={navigation} title="Add Food Details" />
       <View style={styles.purposeSection}>
         <Text style={styles.textHeader}>Food available:</Text>
-        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state })} value={state.foodName[0]} placeholder="Food available" />
+        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, foodName: text })} value={state.foodName} placeholder="Food available" />
+      </View>
+      <View style={styles.purposeSection}>
+        <Text style={styles.textHeader}>Dietary Restrictions:</Text>
+        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, dietaryRestriction: text })} value={state.dietaryRestriction} placeholder="Dietary Restrictrions" />
+      </View>
+      <View style={styles.dosageSection}>
+        <Text style={styles.textHeader}>Best by:</Text>
+        <DateTimePicker testID="dateTimePicker" display="spinner" value={date} mode="time" onChange={onChange} />
       </View>
       <View style={styles.nextSection}>
         <CustomButton
