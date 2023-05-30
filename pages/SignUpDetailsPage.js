@@ -20,6 +20,21 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
     Location: "",
   });
 
+  function handleSubmit() {
+    if (personalDetails.Name.trim() == "") {
+      alert("Please enter a Name");
+      return false;
+    } else if (personalDetails.UserType.trim() == "") {
+      alert("Please choose a specific User Tyoe");
+      return false;
+    } else if (personalDetails.Location.trim() == "") {
+      alert("Please enter the location");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   const handleFormSubmit = async () => {
     const userInfoRef = doc(collection(firestorage, "UsersData"), userId);
     // Update user information in Firestore
@@ -41,8 +56,10 @@ export default function SignUpDetailsPage({ navigation, route, setIsSignUpComple
         });
     }
 
-    await setIsSignUpComplete(true);
-    navigation.navigate("Home");
+    if (handleSubmit() == true) {
+      await setIsSignUpComplete(true)
+      navigation.navigate("Home");
+    }
   };
 
   return (

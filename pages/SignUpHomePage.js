@@ -61,7 +61,7 @@ export default function SignUpHomePage({ navigation, onSignUpHome }) {
                 alert(error);
               });
           } else {
-            alert("Invalid email or password");
+            alert("Invalid email or password. Ensure that password has at least 8 characters.");
           }
         }}
         style={styles.buttonContainer}
