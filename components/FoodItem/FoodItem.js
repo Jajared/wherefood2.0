@@ -72,7 +72,7 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
             <View style={styles.foodContainer}>
               <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16 }}>{foodData.foodName}</Text>
+                <Text style={{ flex: 7, fontSize: 16, flexWrap: 'wrap', flexShrink: 1 }}>{foodData.foodName}</Text>
               </View>
               <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   timeText: {
     flex: 3,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 16,
   },
   keyInfoContainer: {
     flex: 1,
