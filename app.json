@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MedAlert",
-    "slug": "MedAlert",
+    "name": "whereFood",
+    "slug": "whereFood",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -33,7 +33,7 @@
         "NSCameraUsageDescription": "Camera is used to scan medication labels.",
         "UIBackgroundModes": ["remote-notification"]
       },
-      "bundleIdentifier": "com.jajabonks.MedAlert"
+      "bundleIdentifier": "com.jajabonks.whereFood"
     },
     "android": {
       "adaptiveIcon": {
