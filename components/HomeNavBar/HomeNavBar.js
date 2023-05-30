@@ -50,13 +50,11 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   daySection: {
-    flex: 1,
     fontSize: 30,
     fontWeight: "bold",
     width: "90%",
   },
   addButton: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
     paddingRight: 30,
