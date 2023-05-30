@@ -1,6 +1,7 @@
 import { StyleSheet, Text, SafeAreaView, View, TouchableOpacity, TextInput, Button, StatusBar } from "react-native";
 import { useState } from "react";
 import BackNavBar from "../components/BackNavBar/BackNavBar";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CustomButton from "../components/Buttons/CustomButton";
 import uuid from "react-native-uuid";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -8,6 +9,35 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 export default function AddFoodDetails({ navigation, route, establishmentName, addFoodItem, userlocation }) {
   const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: establishmentName, location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "" });
   const [date, setDate] = useState(new Date(2023, 1, 1, 9, 0, 0));
+  const [selectedCheck, setSelectedCheck] = useState([]);
+  
+const handleCheckSelection = (check) => {
+  const dietaryRestrictionOptions = {
+    1: 'Halal',
+    2: 'Vegetarian',
+    3: 'Vegan',
+    4: 'NIL',
+  };
+
+  let updatedSelection = [...selectedCheck];
+
+  if (updatedSelection.includes(check)) {
+    updatedSelection = updatedSelection.filter((option) => option !== check);
+  } else {
+    updatedSelection.push(check);
+  }
+
+  setSelectedCheck(updatedSelection);
+
+  const selectedDietaryRestrictions = updatedSelection.map((option) => dietaryRestrictionOptions[option]);
+  const dietaryRestrictionsString = selectedDietaryRestrictions.join(', ');
+  setState((prevState) => ({ ...prevState, dietaryRestriction: dietaryRestrictionsString }));
+
+  if (updatedSelection.includes(4) && updatedSelection.length > 1) {
+    alert("If 'NIL' is selected, other checkboxes should not be selected. Please uncheck the boxes where necessary.");
+  }
+}
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
@@ -43,9 +73,46 @@ export default function AddFoodDetails({ navigation, route, establishmentName, a
         <Text style={styles.textHeader}>Food available:</Text>
         <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, foodName: text })} value={state.foodName} placeholder="Food available" />
       </View>
-      <View style={styles.purposeSection}>
-        <Text style={styles.textHeader}>Dietary Restrictions:</Text>
-        <TextInput style={styles.inputBox} onChangeText={(text) => setState({ ...state, dietaryRestriction: text })} value={state.dietaryRestriction} placeholder="Dietary Restrictrions" />
+      <View style={styles.frequencySection}>
+        <Text style={styles.textHeader}>Dietary Restrictions (can tick more than one):</Text>
+        <View>
+          <BouncyCheckbox
+            text="Halal"
+            textStyle={{
+              textDecorationLine: 'none',
+            }}
+            style={styles.frequencyItem}
+            isChecked={selectedCheck.includes(1)}
+            onPress={() => handleCheckSelection(1)}
+          />
+          <BouncyCheckbox
+            text="Vegetarian"
+            textStyle={{
+              textDecorationLine: 'none',
+            }}
+            style={styles.frequencyItem}
+            isChecked={selectedCheck.includes(2)}
+            onPress={() => handleCheckSelection(2)}
+          />
+          <BouncyCheckbox
+            text="Vegan"
+            textStyle={{
+              textDecorationLine: 'none',
+            }}
+            style={styles.frequencyItem}
+            isChecked={selectedCheck.includes(3)}
+            onPress={() => handleCheckSelection(3)}
+          />
+          <BouncyCheckbox
+            text="NIL"
+            textStyle={{
+              textDecorationLine: 'none',
+            }}
+            style={styles.frequencyItem}
+            isChecked={selectedCheck.includes(4)}
+            onPress={() => handleCheckSelection(4)}
+          />
+        </View>
       </View>
       <View style={styles.dosageSection}>
         <Text style={styles.textHeader}>Best by:</Text>
