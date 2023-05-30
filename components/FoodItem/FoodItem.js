@@ -37,9 +37,6 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
             <View style={styles.keyInfoContainer}>
               <View style={{ flex: 1, flexDirection: "row"}}>
                 <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-                {/* <Text style={{ flex: 6, fontWeight: "bold", fontSize: 18 }}>
-                  {foodData.establishmentName}, {foodData.location}
-                </Text> */}
               </View>
               <View style={{ flex: 6, flexDirection: "row"}}>
                 <TextTicker
