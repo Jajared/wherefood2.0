@@ -62,6 +62,8 @@ We're proud of the fact that we managed to complete a working product and pick u
 ## What's next for wherelambo whereFood
 We intend to extend our app if possible, and here is a list of how we might possibly extend the features of our application.
 
+##
+
 ## Potential Features
 
 ### Users
@@ -72,3 +74,28 @@ We intend to extend our app if possible, and here is a list of how we might poss
         - Dietary preferences
 - Bookmark feature
     - Users can save a list of businesses for alerts when they have listings
+
+
+## Running the app (⚠️ This app has only been developed for iOS devices ⚠️)
+This guide will walk you through the steps to run an Expo Go app on your device using the Expo Client app.
+### Prerequisites
+Before you begin, make sure you have the following installed:
+- Node.js (version 12 or newer)
+- Expo CLI - Install it globally by running the following command
+```
+npm install -g expo-cli
+```
+- Expo Go Client App on your mobile device
+
+### Running the script
+1. Install all dependencies
+```
+npm install
+```
+2. Start the development server
+```
+npm run start
+```
+3. To run the iOS simulator, ensure that you have the XCode simulator installed
+4. To run on a physical device, scan the QR code displayed in the terminal
+- On iOS: Use the device's camera app or the QR code scanner in the Control Center.
