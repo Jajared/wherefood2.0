@@ -22,28 +22,28 @@ export default function HomeScreenCustomer({ navigation, allFoodItems, userName,
 
   const handleHalal = () => {
     const filteredItems = allFoodItems.filter((data) => {
-      return data.dietaryRestriction === "Halal";
+      return data.dietaryRestriction.includes("Halal");
     });
     setSearch(true);
     setFilteredFoodItems(filteredItems);
   };
   const handleVegetarian = () => {
     const filteredItems = allFoodItems.filter((data) => {
-      return data.dietaryRestriction === "Vegetarian";
+      return data.dietaryRestriction.includes("Vegetarian");
     });
     setSearch(true);
     setFilteredFoodItems(filteredItems);
   };
   const handleVegan = () => {
     const filteredItems = allFoodItems.filter((data) => {
-      return data.dietaryRestriction === "Vegan";
+      return data.dietaryRestriction.includes("Vegan");
     });
     setSearch(true);
     setFilteredFoodItems(filteredItems);
   };
   const handleNoRestrictions = () => {
     const filteredItems = allFoodItems.filter((data) => {
-      return data.dietaryRestriction === "NIL";
+      return data.dietaryRestriction;
     });
     setSearch(true);
     setFilteredFoodItems(filteredItems);
