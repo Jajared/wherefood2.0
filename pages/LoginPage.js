@@ -16,6 +16,7 @@ export default function LoginPage({ navigation, onLogin }) {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Image source={require("../assets/wherefood_icon.png")} style={styles.logo}></Image>
+      <Text style={styles.brand}>whereFood</Text>
       <Text style={styles.title}>Welcome! 👋</Text>
       <View style={styles.inputBox}>
         <AntDesign name="mail" size={20} color="black" style={styles.inputIcon} />
@@ -75,7 +76,8 @@ const styles = StyleSheet.create({
   logo: {
     height: 100,
     width: 100,
-    marginVertical: 60,
+    marginVertical: 20,
+    
   },
   title: {
     flex: 1,
@@ -139,4 +141,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
   },
+  brand: {
+    fontSize: 25,
+    color: "green",
+    justifyContent: "center",
+    fontWeight: "bold",
+    height: 30,
+    marginBottom: 50,
+  }
 });
