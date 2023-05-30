@@ -56,12 +56,15 @@ export default function HomeScreenCustomer({ navigation, allFoodItems, userName,
         <HomeNavBar navigation={navigation} userName={userName} userType={userType} pressAction={refreshData()} />
       </View>
       <TextInput style={styles.searchBar} placeholder="Search for food by location or name..." value={searchQuery} onChangeText={handleSearchQueryChange} />
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ flex: 1, flexDirection: "row" }}>
-        <DietaryButton title="HALAL" onPress={handleHalal} />
-        <DietaryButton title="VEGETARIAN" onPress={handleVegetarian} />
-        <DietaryButton title="VEGAN" onPress={handleVegan} />
-        <DietaryButton title="NO RESTRICTIONS" onPress={handleNoRestrictions} />
-      </ScrollView>
+      <View style={styles.filterBar}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <DietaryButton title="HALAL" onPress={handleHalal} />
+          <DietaryButton title="VEGETARIAN" onPress={handleVegetarian} />
+          <DietaryButton title="VEGAN" onPress={handleVegan} />
+          <DietaryButton title="NO RESTRICTIONS" onPress={handleNoRestrictions} />
+        </ScrollView>
+      </View>
+
       <View style={styles.medicationSection}>{filteredFoodItems && <FlatList data={filteredFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
       <View style={styles.bottomNavBar}>
         <BottomNavBar navigation={navigation} />
@@ -74,13 +77,13 @@ export default function HomeScreenCustomer({ navigation, allFoodItems, userName,
         <HomeNavBar navigation={navigation} userName={userName} userType={userType} pressAction={refreshData()} />
       </View>
       <TextInput style={styles.searchBar} placeholder="Search for food by location or name..." value={searchQuery} onChangeText={handleSearchQueryChange} />
-      <View style={{ flexDirection: "row" }}>
-        <DietaryButton title="HALAL" onPress={handleHalal} />
-        <DietaryButton title="VEGETARIAN" onPress={handleVegetarian} />
-      </View>
-      <View style={{ flexDirection: "row" }}>
-        <DietaryButton title="VEGAN" onPress={handleVegan} />
-        <DietaryButton title="NO RESTRICTIONS" onPress={handleNoRestrictions} />
+      <View style={styles.filterBar}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <DietaryButton title="HALAL" onPress={handleHalal} />
+          <DietaryButton title="VEGETARIAN" onPress={handleVegetarian} />
+          <DietaryButton title="VEGAN" onPress={handleVegan} />
+          <DietaryButton title="NO RESTRICTIONS" onPress={handleNoRestrictions} />
+        </ScrollView>
       </View>
       <View style={styles.medicationSection}>{allFoodItems && <FlatList data={allFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
       <View style={styles.bottomNavBar}>
@@ -111,11 +114,17 @@ const styles = StyleSheet.create({
   searchBar: {
     height: 40,
     width: "90%",
+    borderColor: "gray",
     borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    paddingLeft: 10,
+  },
+  filterBar: {
+    marginVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 10,
   },
 });
