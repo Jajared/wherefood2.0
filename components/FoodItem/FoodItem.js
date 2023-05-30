@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity, Animated } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import { Entypo, AntDesign, Ionicons } from "@expo/vector-icons";
-import TextTicker from 'react-native-text-ticker';
+import TextTicker from "react-native-text-ticker";
 
 export default function FoodItem({ props, navigation, userType, foodItemAction }) {
   const foodData = props.item;
@@ -35,18 +35,11 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
         <Swipeable renderRightActions={rightActions}>
           <View style={styles.itemContainer}>
             <View style={styles.keyInfoContainer}>
-              <View style={{ flex: 1, flexDirection: "row"}}>
+              <View style={{ flex: 1, flexDirection: "row" }}>
                 <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
               </View>
-              <View style={{ flex: 6, flexDirection: "row"}}>
-                <TextTicker
-                  style={{ fontWeight: "bold", fontSize: 18}}
-                  duration={3000}
-                  loop
-                  bounceDelay = {50}
-                  repeatSpacer={50}
-                  marqueeDelay={1000}
-                >
+              <View style={{ flex: 6, flexDirection: "row" }}>
+                <TextTicker style={{ fontWeight: "bold", fontSize: 18 }} duration={3000} loop bounceDelay={50} repeatSpacer={50} marqueeDelay={1000}>
                   {foodData.establishmentName}, {foodData.location}
                 </TextTicker>
               </View>
@@ -73,17 +66,21 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
             <View style={styles.keyInfoContainer}>
               <View style={{ flex: 1, flexDirection: "row" }}>
                 <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 6, fontWeight: "bold", fontSize: 18 }}>{foodData.location}</Text>
               </View>
-              <View style={{ flex: 1.3, flexDirection: "row" }}>
+              <View style={{ flex: 6, flexDirection: "row" }}>
+                <TextTicker style={{ fontWeight: "bold", fontSize: 18 }} duration={3000} loop bounceDelay={50} repeatSpacer={50} marqueeDelay={1000}>
+                  {foodData.establishmentName}, {foodData.location}
+                </TextTicker>
+              </View>
+              <View style={{ flex: 2.8, flexDirection: "row", marginLeft: 2 }}>
                 <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={styles.timeText}>Best by: {getTime()}</Text>
+                <Text style={styles.timeText}>{getTime()}</Text>
               </View>
             </View>
             <View style={styles.foodContainer}>
               <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16, flexWrap: 'wrap', flexShrink: 1 }}>{foodData.foodName}</Text>
+                <Text style={{ flex: 7, fontSize: 16, flexWrap: "wrap", flexShrink: 1 }}>{foodData.foodName}</Text>
               </View>
               <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
                 <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
