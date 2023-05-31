@@ -6,6 +6,7 @@ import TextTicker from "react-native-text-ticker";
 
 export default function FoodItem({ props, navigation, userType, foodItemAction }) {
   const foodData = props.item;
+  const imageURL = foodData.pictureURL;
   const placeholder = userType === "Establishment" ? "Mark as unavailable" : "Favourite";
   const rightActions = (progress, dragX) => {
     const scale = dragX.interpolate({
@@ -31,65 +32,35 @@ export default function FoodItem({ props, navigation, userType, foodItemAction }
 
   return (
     <SafeAreaView style={styles.container}>
-      {userType === "Establishment" ? (
-        <Swipeable renderRightActions={rightActions}>
-          <View style={styles.itemContainer}>
-            <View style={styles.keyInfoContainer}>
-              <View style={{ flex: 1, flexDirection: "row" }}>
-                <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-              </View>
-              <View style={{ flex: 6, flexDirection: "row" }}>
+      <Swipeable renderRightActions={rightActions}>
+        <View style={styles.itemContainer}>
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: imageURL }} style={styles.image} />
+          </View>
+          <View style={styles.keyInfoContainer}>
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
+              <View style={{ flex: 5 }}>
                 <TextTicker style={{ fontWeight: "bold", fontSize: 18 }} duration={3000} loop bounceDelay={50} repeatSpacer={50} marqueeDelay={1000}>
                   {foodData.establishmentName}, {foodData.location}
                 </TextTicker>
               </View>
-              <View style={{ flex: 2.8, flexDirection: "row" }}>
-                <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={styles.timeText}>{getTime()}</Text>
-              </View>
             </View>
-            <View style={styles.foodContainer}>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16 }}>{foodData.foodName}</Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
-              </View>
+            <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
+              <Text style={{ flex: 5, fontSize: 16, flexWrap: "wrap", flexShrink: 1 }}>{foodData.foodName}</Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
+              <Text style={{ flex: 5, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: "row", marginLeft: 2 }}>
+              <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
+              <Text style={styles.timeText}>Best by: {getTime()}</Text>
             </View>
           </View>
-        </Swipeable>
-      ) : (
-        <Swipeable renderRightActions={rightActions}>
-          <View style={styles.itemContainer}>
-            <View style={styles.keyInfoContainer}>
-              <View style={{ flex: 1, flexDirection: "row" }}>
-                <Entypo name="location-pin" size={20} color="black" style={{ flex: 1 }} />
-              </View>
-              <View style={{ flex: 6, flexDirection: "row" }}>
-                <TextTicker style={{ fontWeight: "bold", fontSize: 18 }} duration={3000} loop bounceDelay={50} repeatSpacer={50} marqueeDelay={1000}>
-                  {foodData.establishmentName}, {foodData.location}
-                </TextTicker>
-              </View>
-              <View style={{ flex: 2.8, flexDirection: "row", marginLeft: 2 }}>
-                <AntDesign name="clockcircleo" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={styles.timeText}>{getTime()}</Text>
-              </View>
-            </View>
-            <View style={styles.foodContainer}>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="fast-food" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16, flexWrap: "wrap", flexShrink: 1 }}>{foodData.foodName}</Text>
-              </View>
-              <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                <Ionicons name="warning" size={20} color="black" style={{ flex: 1 }} />
-                <Text style={{ flex: 7, fontSize: 16, color: "red" }}>{foodData.dietaryRestriction}</Text>
-              </View>
-            </View>
-          </View>
-        </Swipeable>
-      )}
+        </View>
+      </Swipeable>
     </SafeAreaView>
   );
 }
@@ -107,6 +78,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
   icon: {
     flex: 1,
     width: "80%",
@@ -116,11 +91,11 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flex: 1,
-    flexDirection: "column",
-    backgroundColor: "#FAF6E0",
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderColor: "black",
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 5,
     margin: 15,
     alignItems: "center",
     height: 110,
@@ -128,19 +103,17 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   timeText: {
-    flex: 3,
+    flex: 5,
     fontWeight: "bold",
     fontSize: 16,
   },
-  keyInfoContainer: {
+  imageContainer: {
     flex: 1,
-    flexDirection: "row",
+    marginRight: 10,
   },
-  foodContainer: {
+  keyInfoContainer: {
     flex: 2,
     flexDirection: "column",
-    alignSelf: "flex-start",
-    width: "100%",
   },
   rightAction: {
     backgroundColor: "red",
