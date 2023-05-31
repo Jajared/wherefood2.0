@@ -1,18 +1,24 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { FontAwesome5, Entypo } from "@expo/vector-icons";
+import { FontAwesome5, Entypo, AntDesign } from "@expo/vector-icons";
 
 export default function BottomNavBar({ title, props, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.iconSection}>
+        <TouchableOpacity onPress={() => alert("Favourites")}>
+          <AntDesign name="hearto" size={26} color="black" style={styles.icon} />
+          <Text style={styles.text}>Favourites</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.iconSection}>
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Entypo name="home" size={30} color="black" style={styles.icon} />
+          <Entypo name="home" size={26} color="black" style={styles.icon} />
           <Text style={styles.text}>Home</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.iconSection}>
         <TouchableOpacity onPress={() => navigation.navigate("Profile Page")}>
-          <Entypo name="menu" size={34} color="black" />
+          <Entypo name="menu" size={26} color="black" style={styles.icon} />
           <Text style={styles.text}>Menu</Text>
         </TouchableOpacity>
       </View>

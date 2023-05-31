@@ -14,4 +14,5 @@ export interface FoodItem {
   timeOfPost: number;
   stillAvailable: boolean;
   dietaryRestriction: string;
+  pictureURL: string;
 }

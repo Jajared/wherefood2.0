@@ -5,38 +5,43 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import CustomButton from "../components/Buttons/CustomButton";
 import uuid from "react-native-uuid";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { AntDesign } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { storage } from "../firebaseConfig";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 export default function AddFoodDetails({ navigation, route, establishmentName, addFoodItem, userlocation }) {
-  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: establishmentName, location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "" });
+  const [state, setState] = useState({ itemId: uuid.v4(), establishmentId: "1", establishmentName: establishmentName, location: userlocation, foodName: "", timeOfPost: 540, stillAvailable: true, dietaryRestriction: "", pictureURL: "" });
   const [date, setDate] = useState(new Date(2023, 1, 1, 9, 0, 0));
   const [selectedCheck, setSelectedCheck] = useState([]);
-  
-const handleCheckSelection = (check) => {
-  const dietaryRestrictionOptions = {
-    1: 'Halal',
-    2: 'Vegetarian',
-    3: 'Vegan',
-    4: 'NIL',
+  const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const handleCheckSelection = (check) => {
+    const dietaryRestrictionOptions = {
+      1: "Halal",
+      2: "Vegetarian",
+      3: "Vegan",
+      4: "NIL",
+    };
+
+    let updatedSelection = [...selectedCheck];
+
+    if (updatedSelection.includes(check)) {
+      updatedSelection = updatedSelection.filter((option) => option !== check);
+    } else {
+      updatedSelection.push(check);
+    }
+
+    setSelectedCheck(updatedSelection);
+
+    const selectedDietaryRestrictions = updatedSelection.map((option) => dietaryRestrictionOptions[option]);
+    const dietaryRestrictionsString = selectedDietaryRestrictions.join(", ");
+    setState((prevState) => ({ ...prevState, dietaryRestriction: dietaryRestrictionsString }));
+
+    if (updatedSelection.includes(4) && updatedSelection.length > 1) {
+      alert("If 'NIL' is selected, other checkboxes should not be selected. Please uncheck the boxes where necessary.");
+    }
   };
-
-  let updatedSelection = [...selectedCheck];
-
-  if (updatedSelection.includes(check)) {
-    updatedSelection = updatedSelection.filter((option) => option !== check);
-  } else {
-    updatedSelection.push(check);
-  }
-
-  setSelectedCheck(updatedSelection);
-
-  const selectedDietaryRestrictions = updatedSelection.map((option) => dietaryRestrictionOptions[option]);
-  const dietaryRestrictionsString = selectedDietaryRestrictions.join(', ');
-  setState((prevState) => ({ ...prevState, dietaryRestriction: dietaryRestrictionsString }));
-
-  if (updatedSelection.includes(4) && updatedSelection.length > 1) {
-    alert("If 'NIL' is selected, other checkboxes should not be selected. Please uncheck the boxes where necessary.");
-  }
-}
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -65,6 +70,39 @@ const handleCheckSelection = (check) => {
     return true;
   }
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.005,
+    });
+    const source = { uri: result.assets[0].uri };
+    setImage(source);
+    alert("Photo uploaded!");
+  };
+
+  const uploadData = async () => {
+    setUploading(true);
+    const response = await fetch(image.uri);
+    const blob = await response.blob();
+    const storageRef = ref(storage, state.itemId);
+    try {
+      await uploadBytes(storageRef, blob).then((snapshot) => {
+        getDownloadURL(ref(storage, state.itemId)).then((url) => {
+          const newState = { ...state, pictureURL: url };
+          addFoodItem(newState);
+          setState(newState);
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    setUploading(false);
+
+    setImage(null);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -75,56 +113,62 @@ const handleCheckSelection = (check) => {
       </View>
       <View style={styles.frequencySection}>
         <Text style={styles.textHeader}>Dietary Restrictions (can tick more than one):</Text>
-        <View>
-          <BouncyCheckbox
-            text="Halal"
-            textStyle={{
-              textDecorationLine: 'none',
-            }}
-            style={styles.frequencyItem}
-            isChecked={selectedCheck.includes(1)}
-            onPress={() => handleCheckSelection(1)}
-          />
-          <BouncyCheckbox
-            text="Vegetarian"
-            textStyle={{
-              textDecorationLine: 'none',
-            }}
-            style={styles.frequencyItem}
-            isChecked={selectedCheck.includes(2)}
-            onPress={() => handleCheckSelection(2)}
-          />
-          <BouncyCheckbox
-            text="Vegan"
-            textStyle={{
-              textDecorationLine: 'none',
-            }}
-            style={styles.frequencyItem}
-            isChecked={selectedCheck.includes(3)}
-            onPress={() => handleCheckSelection(3)}
-          />
-          <BouncyCheckbox
-            text="NIL"
-            textStyle={{
-              textDecorationLine: 'none',
-            }}
-            style={styles.frequencyItem}
-            isChecked={selectedCheck.includes(4)}
-            onPress={() => handleCheckSelection(4)}
-          />
-        </View>
+        <BouncyCheckbox
+          text="Halal"
+          textStyle={{
+            textDecorationLine: "none",
+          }}
+          style={styles.frequencyItem}
+          isChecked={selectedCheck.includes(1)}
+          onPress={() => handleCheckSelection(1)}
+        />
+        <BouncyCheckbox
+          text="Vegetarian"
+          textStyle={{
+            textDecorationLine: "none",
+          }}
+          style={styles.frequencyItem}
+          isChecked={selectedCheck.includes(2)}
+          onPress={() => handleCheckSelection(2)}
+        />
+        <BouncyCheckbox
+          text="Vegan"
+          textStyle={{
+            textDecorationLine: "none",
+          }}
+          style={styles.frequencyItem}
+          isChecked={selectedCheck.includes(3)}
+          onPress={() => handleCheckSelection(3)}
+        />
+        <BouncyCheckbox
+          text="NIL"
+          textStyle={{
+            textDecorationLine: "none",
+          }}
+          style={styles.frequencyItem}
+          isChecked={selectedCheck.includes(4)}
+          onPress={() => handleCheckSelection(4)}
+        />
       </View>
-      <View style={styles.dosageSection}>
+      <View style={styles.purposeSection}>
+        <Text style={styles.textHeader}>Upload Image:</Text>
+        <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+          <AntDesign name="camera" size={24} color="black" />
+          <Text>Upload Image</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.bestBySection}>
         <Text style={styles.textHeader}>Best by:</Text>
         <DateTimePicker testID="dateTimePicker" display="spinner" value={date} mode="time" onChange={onChange} />
       </View>
       <View style={styles.nextSection}>
         <CustomButton
           title="Next"
-          onPress={() => {
+          onPress={async () => {
             if (handleSubmit() == true) {
-              addFoodItem(state);
-              navigation.navigate("Home");
+              uploadData().then(() => {
+                navigation.navigate("Home");
+              });
             }
           }}
         />
@@ -142,27 +186,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-starts",
   },
-  nameSection: {
-    flex: 1,
-    width: "80%",
-  },
-  bottomNavBar: {
-    flex: 1,
+  uploadButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
   },
   purposeSection: {
     flex: 1,
     width: "80%",
-  },
-  intakeSection: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderRadius: 5,
-    width: "80%",
+    marginVertical: 10,
   },
   frequencySection: {
     flex: 2,
+    width: "80%",
+    marginVertical: 10,
+  },
+  bestBySection: {
+    flex: 4,
     width: "80%",
   },
   frequencyItem: {
