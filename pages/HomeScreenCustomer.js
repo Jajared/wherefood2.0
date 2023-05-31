@@ -65,7 +65,7 @@ export default function HomeScreenCustomer({ navigation, allFoodItems, userName,
         </ScrollView>
       </View>
 
-      <View style={styles.medicationSection}>{filteredFoodItems && <FlatList data={filteredFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
+      <View style={styles.foodSection}>{filteredFoodItems && <FlatList data={filteredFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
       <View style={styles.bottomNavBar}>
         <BottomNavBar navigation={navigation} />
       </View>
@@ -85,7 +85,7 @@ export default function HomeScreenCustomer({ navigation, allFoodItems, userName,
           <DietaryButton title="NO RESTRICTIONS" onPress={handleNoRestrictions} />
         </ScrollView>
       </View>
-      <View style={styles.medicationSection}>{allFoodItems && <FlatList data={allFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
+      <View style={styles.foodSection}>{allFoodItems && <FlatList data={allFoodItems.filter((data) => data.stillAvailable === true)} renderItem={(data) => <FoodItem title={data.Name} props={data} navigation={navigation} userType={userType} foodItemAction={foodItemAction} />} keyExtractor={(item) => item.itemId} />}</View>
       <View style={styles.bottomNavBar}>
         <BottomNavBar navigation={navigation} />
       </View>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   bottomNavBar: {
     flex: 1,
   },
-  medicationSection: {
+  foodSection: {
     flex: 7,
     width: "100%",
   },

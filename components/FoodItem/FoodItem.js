@@ -100,7 +100,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 110,
     width: "90%",
-    padding: 5,
   },
   timeText: {
     flex: 5,
